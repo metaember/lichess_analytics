@@ -81,6 +81,6 @@ if __name__ == '__main__':
     print(a_player)
 
     for g in games['currentPageResults']:
-        ts = g['createdAt']
+        ts = g['createdAt']//1000 # it's in miliseconds
         dt = datetime.datetime.fromtimestamp(ts)
         print(dt.strftime("%A, %d. %B %Y %I:%M%p"))
