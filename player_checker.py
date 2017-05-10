@@ -6,8 +6,17 @@ PLAYER_BASE_URL = "https://en.lichess.org/api/user/"
 
 
 class Player(object):
+    """
+    Gives basic player information
+    """
 
     def __init__(self, username):
+        """
+        Creates new Player instance
+
+        Args:
+            username (str): Username of player in Lichess
+        """
         self.username = username
         self.player_url = urllib.parse.urljoin(PLAYER_BASE_URL, username)
 
@@ -17,16 +26,33 @@ class Player(object):
             raise KeyError('User {} not found'.format(self.username))
 
     def __str__(self):
+        """
+        Returns:
+            str: Basic information about the player
+        """
         text = 'Player: {}; URL: {}'.format(self.username, self.player_url)
         return text
 
     def get_total_games(self):
+        """
+        Returns:
+            int: Number of games played in total
+        """
         r = requests.get(self.player_url)
         total = r.json()["count"]["all"]
         return total
 
 
 def get_username_from_file(file_name='local_data.txt'):
+    """
+    Reads plain text file to get username
+
+    Args:
+        file_name (str): Name or path of text file
+
+    Returns:
+        str: username from file
+    """
     with open(file_name, 'r') as f:
         username = f.readline()
         username = username.strip()
