@@ -26,10 +26,15 @@ class Player(object):
         return total
 
 
-if __name__ == '__main__':
-    with open('local_data.txt', 'r') as f:
+def get_username_from_file(file_name='local_data.txt'):
+    with open(file_name, 'r') as f:
         username = f.readline()
         username = username.strip()
+    return username
+
+
+if __name__ == '__main__':
+    username = get_username_from_file()
 
     a_player = Player(username)
     total_games = a_player.get_total_games()
