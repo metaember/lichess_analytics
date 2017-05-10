@@ -1,6 +1,6 @@
 import requests
 import urllib.parse
-
+import datetime
 
 PLAYER_BASE_URL = "https://en.lichess.org/api/user/"
 
@@ -33,6 +33,11 @@ class Player(object):
         text = 'Player: {}; URL: {}'.format(self.username, self.player_url)
         return text
 
+
+    def __repr__(self):
+        return self.__str__()
+
+
     def get_total_games(self):
         """
         Returns:
@@ -41,6 +46,12 @@ class Player(object):
         r = requests.get(self.player_url)
         total = r.json()["count"]["all"]
         return total
+
+    def get_last_games(self, count):
+        suffix = "/games?nb={}".format(count)
+        r = requests.get(self.player_url+suffix)
+        return r.json()
+
 
 
 def get_username_from_file(file_name='local_data.txt'):
@@ -64,7 +75,12 @@ if __name__ == '__main__':
 
     a_player = Player(username)
     total_games = a_player.get_total_games()
+    games = a_player.get_last_games(10)
 
     print("{} has played a total of {} games so far".format(username, total_games))
     print(a_player)
 
+    for g in games['currentPageResults']:
+        ts = g['createdAt']
+        dt = datetime.datetime.fromtimestamp(ts)
+        print(dt.strftime("%A, %d. %B %Y %I:%M%p"))
