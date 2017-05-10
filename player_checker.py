@@ -8,7 +8,13 @@ PLAYER_BASE_URL = "https://en.lichess.org/api/user/"
 class Player(object):
 
     def __init__(self, username):
+        self.username = username
         self.player_url = urllib.parse.urljoin(PLAYER_BASE_URL, username)
+
+        r = requests.get(self.player_url)
+
+        if r.status_code == 404:
+            raise KeyError('User {} not found'.format(self.username))
 
     def get_total_games(self):
         r = requests.get(self.player_url)
