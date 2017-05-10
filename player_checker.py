@@ -16,6 +16,10 @@ class Player(object):
         if r.status_code == 404:
             raise KeyError('User {} not found'.format(self.username))
 
+    def __str__(self):
+        text = 'Player: {}; URL: {}'.format(self.username, self.player_url)
+        return text
+
     def get_total_games(self):
         r = requests.get(self.player_url)
         total = r.json()["count"]["all"]
@@ -31,4 +35,5 @@ if __name__ == '__main__':
     total_games = a_player.get_total_games()
 
     print("{} has played a total of {} games so far".format(username, total_games))
+    print(a_player)
 
