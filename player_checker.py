@@ -47,11 +47,25 @@ class Player(object):
         total = r.json()["count"]["all"]
         return total
 
+
     def get_last_games(self, count):
         suffix = "/games?nb={}".format(count)
         r = requests.get(self.player_url+suffix)
         return r.json()
 
+    def count_games_today(self):
+        games = self.get_last_games(count=100)
+        count = 0
+        today = datetime.date.today()
+        for g in games['currentPageResults']:
+            ts = g['createdAt']//1000 # it's in miliseconds
+            dt = datetime.datetime.fromtimestamp(ts)
+            if dt.date() == today:
+                count += 1
+                print(dt.strftime("%A, %d. %B %Y %I:%M%p"))
+
+        print("{} played {} games today".format(self.username, count))
+        return count
 
 
 def get_username_from_file(file_name='local_data.txt'):
@@ -80,7 +94,4 @@ if __name__ == '__main__':
     print("{} has played a total of {} games so far".format(username, total_games))
     print(a_player)
 
-    for g in games['currentPageResults']:
-        ts = g['createdAt']//1000 # it's in miliseconds
-        dt = datetime.datetime.fromtimestamp(ts)
-        print(dt.strftime("%A, %d. %B %Y %I:%M%p"))
+    a_player.count_games_today()
