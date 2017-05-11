@@ -49,11 +49,25 @@ class Player(object):
 
 
     def get_last_games(self, count):
+        """
+        Get the most recent `count` games.
+
+        Args:
+            count (int): number of games to return
+        Returns:
+            dict: Json dict of information on the last `count` games
+        """
         suffix = "/games?nb={}".format(count)
         r = requests.get(self.player_url+suffix)
         return r.json()
 
     def count_games_today(self):
+        """
+        Count the number of games played today
+
+        Returns:
+            int: number of games played today
+        """
         games = self.get_last_games(count=100)
         count = 0
         today = datetime.date.today()
@@ -70,7 +84,7 @@ class Player(object):
 
 def get_username_from_file(file_name='local_data.txt'):
     """
-    Reads plain text file to get username
+    Read plain text file to get username
 
     Args:
         file_name (str): Name or path of text file
